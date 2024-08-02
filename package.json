@@ -2,7 +2,7 @@
   "name": "whatsapp-bot",
   "version": "1.0.0",
   "scripts": {
-    "start": "node functions/index.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
