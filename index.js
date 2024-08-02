@@ -1,16 +1,15 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
-console.log("Running")
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-console.log("Server is running");
-
+console.log("server is running");
 const client = new Client({
     authStrategy: new LocalAuth()
 });
@@ -31,7 +30,7 @@ client.on('disconnected', reason => {
     console.log('Client was logged out:', reason);
 });
 
-app.get('/send-message', (req, res) => {
+app.get('/api/send-message', (req, res) => {
     const { number, message } = req.query;
     if (!number || !message) {
         return res.status(400).send({ error: 'Please provide both number and message' });
@@ -48,5 +47,4 @@ client.on('message', message => {
 
 client.initialize();
 
-module.exports = app;
 module.exports.handler = serverless(app);
