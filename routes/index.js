@@ -5,7 +5,6 @@ const demo = require('./demo.route');
 const r = Router();
 
 r.use('/demo', demo);
-console.log("ok")
 
 r.get('/', (req, res) => res.json(new SuccessResponseObject('express vercel boiler plate')));
 
