@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const { ErrorResponseObject } = require('./common/http');
 const routes = require('./routes');
+const serverless = require('serverless-http');
 
 const app = express();
 
