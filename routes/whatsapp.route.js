@@ -1,15 +1,9 @@
-const express = require('express');
-const helmet = require('helmet');
-const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
+const { Router } = require('express');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const serverless = require('serverless-http');
+const { SuccessResponseObject, ErrorResponseObject } = require('../common/http');
 
-const app = express();
-
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-app.use(helmet());
+const router = Router();
 
 const client = new Client({
     authStrategy: new LocalAuth()
@@ -18,34 +12,42 @@ const client = new Client({
 let qrCodeGenerated = false;
 let clientReady = false;
 
+// Event when QR code is generated
 client.on('qr', qr => {
     qrCodeGenerated = true;
     console.log('QR Code received, scan it with your phone');
     qrcode.generate(qr, { small: true });
 });
 
+// Event when client is ready
 client.on('ready', () => {
     clientReady = true;
     console.log('Client is ready!');
+    // Automatically send a message to verify
+    const number = '923234341354'; // replace with your number
+    const message = 'Allhamdullilah';
+    const chatId = `${number}@c.us`;
+
+    client.sendMessage(chatId, message)
+        .then(response => console.log('Message sent successfully:', response))
+        .catch(err => console.error('Error sending message:', err));
 });
 
+// Event when authentication fails
 client.on('auth_failure', message => {
     console.error('Authentication failure:', message);
 });
 
+// Event when client is disconnected
 client.on('disconnected', reason => {
     console.log('Client was logged out:', reason);
 });
 
-app.get('/send-message', async (req, res) => {
+// Endpoint to send a message
+router.get('/send-message', async (req, res) => {
     const { number, message } = req.query;
     if (!number || !message) {
         return res.status(400).json(new ErrorResponseObject('Please provide both number and message'));
-    }
-
-    // Initialize the client if needed
-    if (!clientReady) {
-        await client.initialize();
     }
 
     if (!clientReady) {
@@ -66,7 +68,8 @@ app.get('/send-message', async (req, res) => {
     }
 });
 
-app.get('/status', (req, res) => {
+// Endpoint to check status
+router.get('/status', (req, res) => {
     if (!qrCodeGenerated) {
         return res.json(new SuccessResponseObject('QR Code not yet generated', null));
     }
@@ -76,11 +79,9 @@ app.get('/status', (req, res) => {
     res.json(new SuccessResponseObject('Client is ready and QR Code was generated', null));
 });
 
-// Catch-all handler for undefined routes
-app.all('*', (req, res) => res.status(404).json(new ErrorResponseObject('route not defined')));
-
+// Initialize client and handle errors
 client.initialize().catch(err => {
     console.error('Error initializing client:', err);
 });
 
-module.exports = app; // Export the app for serverless deployment
+module.exports = router;
