@@ -1,21 +1,16 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const serverless = require('serverless-http');
+const helmet = require('helmet');
+const { ErrorResponseObject } = require('./common/http');
+const routes = require('./routes');
 
-// Initialize the Express app
 const app = express();
-app.use(cors());
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
-// Simple endpoint to test serverless function
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'OK' });
-});
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(helmet());
+app.use('/', routes);
 
-// Catch-all handler for undefined routes
-app.all('*', (req, res) => res.status(404).json({ error: 'Route not defined' }));
+// default catch all handler
+app.all('*', (req, res) => res.status(404).json(new ErrorResponseObject('route not defined')));
 
-// Export the app for serverless deployment
-module.exports.handler = serverless(app);
+module.exports = app;
