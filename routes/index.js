@@ -7,6 +7,6 @@ const r = Router();
 
 r.use('/whatsapp', whatsapp);
 
-r.get('/', (req, res) => res.json(new SuccessResponseObject('express vercel boiler plate geo')));
+r.get('/', (req, res) => res.json(new SuccessResponseObject('express vercel boiler plate')));
 
 module.exports = r;

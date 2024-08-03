@@ -14,5 +14,10 @@ app.use('/', routes);
 // default catch all handler
 app.all('*', (req, res) => res.status(404).json(new ErrorResponseObject('route not defined')));
 
+// Start server on port 3000 or any port specified in the environment variable
+const PORT = process.env.PORT || 3005;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 module.exports = app;
-console.log("sd")
