@@ -1,19 +1,5 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "index.js",
-        "use": "@vercel/node",
-        "config": {
-          "nodeVersion": "18.x"
-        }
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/send-message",
-        "dest": "/index.js"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [{ "src": "app.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "(.*)", "dest": "app.js" }]
+}
