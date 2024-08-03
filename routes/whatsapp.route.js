@@ -1,4 +1,3 @@
-console.log("wp");
 const { Router } = require('express');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
@@ -10,12 +9,17 @@ const client = new Client({
     authStrategy: new LocalAuth()
 });
 
+let qrCodeGenerated = false;
+let clientReady = false;
+
 client.on('qr', qr => {
+    qrCodeGenerated = true;
     console.log('QR Code received, scan it with your phone');
     qrcode.generate(qr, { small: true });
 });
 
 client.on('ready', () => {
+    clientReady = true;
     console.log('Client is ready!');
     const number = '923234341354'; // replace with your number
     const message = 'Allhamdullilah';
@@ -43,6 +47,16 @@ router.get('/send-message', (req, res) => {
     client.sendMessage(chatId, message)
         .then(response => res.json(new SuccessResponseObject('Message sent successfully', response)))
         .catch(err => res.status(500).json(new ErrorResponseObject('Error sending message', err.message)));
+});
+
+router.get('/status', (req, res) => {
+    if (!qrCodeGenerated) {
+        return res.json(new SuccessResponseObject('QR Code not yet generated', null));
+    }
+    if (!clientReady) {
+        return res.json(new SuccessResponseObject('Client not yet ready', null));
+    }
+    res.json(new SuccessResponseObject('Client is ready and QR Code was generated', null));
 });
 
 client.initialize().catch(err => {
