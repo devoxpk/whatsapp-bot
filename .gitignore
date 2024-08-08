@@ -1,7 +1,2 @@
-# Local Netlify folder
-.netlify
-node_modules/
-.wwebjs_auth
-.wwebjs_cache
-.vercel
-coverage/
+/node_modules/
+.env
