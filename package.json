@@ -5,19 +5,17 @@
   "author": "Hayk Simonyan",
   "license": "",
   "main": "server.js",
+
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "@google-cloud/speech": "^6.7.0",
     "@google/generative-ai": "^0.17.0",
     "@whiskeysockets/baileys": "^6.7.6",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.19.2",
-    "netlify-cli": "^17.34.2",
-    "netlify-lambda": "^0.4.0",
     "node-fetch": "^3.3.2",
     "pino": "^9.3.2",
     "pm2": "^5.4.2",
