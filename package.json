@@ -4,10 +4,10 @@
   "description": "Basic express server",
   "author": "Hayk Simonyan",
   "license": "",
-  "main": "server.js",
+  "main": "index.js",
 
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.17.0",
