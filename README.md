@@ -1,8 +1,13 @@
-# node-express-vercel
-Hosting express node project on vercel
+# Basic express server
 
-### Video
-> https://youtu.be/vCuf62T2snY
+Dockerized express server for testing deployments
 
-### Deployed on
-> https://node-express-vercel-rose.vercel.app/home
+## To run locally
+
+    $ docker build -t basic-express-api .
+    $ docker run -p 3000:3000 basic-express-api
+
+## Without docker
+
+    $ npm i
+    $ npm start
